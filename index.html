@@ -21,12 +21,40 @@
         </div>
     </nav>
     <!-- body -->
-    <div class="card card-default mt-3">
-        <div class="card-header">Convert</div>
-        <div class="card-body"></div>
-        <div class="card-footer">
-            Equivalent to: 
+    <div class="row">
+        <div class="col-md-2 col-lg-2 col-sm-2"></div>
+        <div class="col-md-8 col-lg-8 col-sm-8">
+            <div class="card card-default mt-3">
+                <div class="card-header"><h4 class="ml-5">CONVERT</h4></div>
+                <div class="card-body">
+                    <div class="row ml-5 mt-2">
+                        <input type="number" name="amount" id="amount" class="amount" placeholder="Enter Amount">
+                    </div>
+                    <div class="row ml-5 mt-2">
+                        <select class="currency" id="from_cur">
+                            <option value="" selected >From</option>
+                        </select>
+                    </div>
+                    <div class="row ml-5 mt-2">
+                        <select class="currency" id="to_cur">
+                                <option value="" selected >To</option>
+                        </select>
+                    </div>
+                    <div class="row ml-5 mt-2">
+                        <button class="btn btn-src btn-lg btn-">Convert</button>
+                    </div>
+                    <div class="row" id="alert"></div>
+                </div>
+                <div class="card-footer">
+                        <div class="row ml-5 mt-3">
+                                <h3 style="text-align: center">
+                                    <label id="result" class="inpt" style="text-align: center;">0.00</label>
+                                </h3>
+                            </div>
+                </div>
+            </div>
         </div>
+        <div class="col-md-2 col-lg-2 col-sm-2"></div>
     </div>
     <!-- footer -->
     <footer class="fixed-bottom">
