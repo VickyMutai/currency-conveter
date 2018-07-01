@@ -1,14 +1,11 @@
-const staticCacheName = 'BrightsCurrencyConverter-static-v4';
+const staticCacheName = 'MyCurrencyConverter-static-v4';
 
 // files to cache
 const filesToCache = [
-  './',
-  './index.html',
-  './scripts/appcontroller.js',
-  './css/styles.css',
-  './manifest.json',
-  'https://fonts.googleapis.com/icon?family=Material+Icons',
-  'https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en'
+  '/',
+  'index.html',
+  '/js/index.js',
+  '/css/style.css',
 ];
 
 self.addEventListener('install', function(event) {
@@ -39,11 +36,9 @@ self.addEventListener('install', function(event) {
       })
     );
   });
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   self.addEventListener('fetch', function(event) {
     let requestUrl = new URL(event.request.url);
     
-    // loading the index page from cache when wizard at on the browser.
     if (requestUrl.origin === location.origin) {
       if (requestUrl.pathname === '/') {
         caches.match(event.request).then(response => {
