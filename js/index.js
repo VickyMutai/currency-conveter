@@ -5,16 +5,12 @@ class CurrencyConverter {
         this.dbPromise = this.openDatabase();
         this.getAllCurrencies();
     }
-    /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     method that registers service worker
-    */
+    // register service worker
     registerServiceWorker() {
         if (!navigator.serviceWorker) return;
         navigator.serviceWorker.register('sw.js').then(reg => {});
     } // close registerServiceWorker method
-    /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     create/open an indexDB database
-    */
+    // create index db database
     openDatabase() {
         if (!('indexedDB' in window)) {
             console.log('This browser doesn\'t support IndexedDB');
@@ -33,9 +29,7 @@ class CurrencyConverter {
                 }
          });
     }
-    /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     method that adds list of currencies to database store
-    */
+    // add data to database
     addCurrenciesToCache(currencies) {
         this.dbPromise.then(db => {
             if (!db) return;
@@ -60,9 +54,7 @@ class CurrencyConverter {
             console.log('list of currencies added to cache (db)');
          }).catch(error => console.log('Something went wrong: '+ error));
     }
-    /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        Method that cache conversion rate
-    */
+
     addCurrencyRateToCache(rate, fromCurrency, toCurrency) {
         this.dbPromise.then(db => {
             if (!db) return;
@@ -86,8 +78,7 @@ class CurrencyConverter {
             console.log('Currency rate for ' + fromCurrency + ' and ' + toCurrency + ' added to cache');
          }).catch(error => console.log('Something went wrong: '+ error));
     }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // get cached currency rate
+   
     getCurrencyRateFromCache(fromCurrency, toCurrency) {
        return this.dbPromise.then(db => {
             if (!db) return;
@@ -106,8 +97,7 @@ class CurrencyConverter {
              return error;
         });
     }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // method that gets all cached currencies and display them on select field through postToHTMLPage method.
+   
     showCachedCurrencies() {
         return this.dbPromise.then( db => {
 
@@ -135,10 +125,7 @@ class CurrencyConverter {
             });
           });
     }
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     method that fetches the list of available currencies from the api online
-    */
+
     getAllCurrencies() {
         fetch('https://free.currencyconverterapi.com/api/v5/currencies').then(response => {
             return response.json();
@@ -165,8 +152,7 @@ class CurrencyConverter {
             this.showCachedCurrencies(); // get currencies from cache since user is offline.
         });
     }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // Method that handles html page/ DOM communication
+
     postToHTMLPage(wht, msg, outputResult = {}) {
        if(wht === 'result') { // show result after conversion
             document.getElementById('result').innerHTML = `${outputResult.toCurrency} ${outputResult.result.toFixed(2)}`;
@@ -181,9 +167,7 @@ class CurrencyConverter {
         }
         return;
     }
-    /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     method that calls the currency api for conversion rate.
-    */
+
     getConversionRate(fromCurrency, toCurrency) {
         fromCurrency = encodeURIComponent(fromCurrency);
         toCurrency = encodeURIComponent(toCurrency);
@@ -192,50 +176,33 @@ class CurrencyConverter {
         return fetch('https://free.currencyconverterapi.com/api/v5/convert?q='+ query + '&compact=ultra').then(response => {
             return response.json();
         }).then(response => {
-             /*appStatus denotes where currency rate was obtained from
-            online means currency rate was obtained from api call while
-            offline means it was obtained from cache*/
-
-            const currencyRate = response[Object.keys(response)]; // get the conversion rate 
+            const currencyRate = response[Object.keys(response)]; 
             return  {currencyRate, appStatus: 'online'};
         }).catch(error => {
-           /* currency rate was gotten from cache, 
-            set appStatus to offline*/
 
-            // It looks like user is offline;
-            // call the method that gets the currency rate from cache when user if offline
             const currencyRate = this.getCurrencyRateFromCache(fromCurrency, toCurrency);
             return  currencyRate;
         });
     }
-     /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     method that creates html element
-    */
+
     createElement(element) {
         return document.createElement(element);
         return;
     }
-     /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     method that appends html element to a parent html element
-    */
+
    appendElement(parentElement, element)
    {
-       let element2 = element.cloneNode(true); // clone option element 
-       // add element (option element with currency name) to parent alement(select field)
+       let element2 = element.cloneNode(true); 
        parentElement[0].appendChild(element);
        parentElement[1].appendChild(element2);
        return;
    }
-} // close class
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+}
 
 
 
 (function(){
-    const converter = new CurrencyConverter(); // create an instance of CurrencyConverter class
-
-    // add event listener to the convertion button in the index page
+    const converter = new CurrencyConverter(); 
     document.getElementById('btnConvert').addEventListener('click', () =>{
         let msg = '';
          converter.postToHTMLPage('msg', 'conversion in progress, please wait...');
